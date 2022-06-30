@@ -1,0 +1,190 @@
+Linear reg
+
+X=data.drop(['Y house price of unit area'],axis=1)
+y=data['Y house price of unit area']
+
+X_train,X_test,y_train,y_test=train_test_split(X,y,test_size=0.2)
+
+lin = LinearRegression()
+lin.fit(np.array(X_train['X3 distance to the nearest MRT station']).reshape(-1,1),y_train)
+y_pred = lin.predict(np.array(X_test['X3 distance to the nearest MRT station']).reshape(-1,1))
+
+from sklearn.metrics import mean_squared_error,r2_score
+print('MSE: ',mean_squared_error(y_test,y_pred))
+print('R2: ',r2_score(y_test,y_pred))
+
+LOGISTIC REGRESSION----------------------------------------------------------------------------------------------------------------------------------------
+
+X = df.iloc[:, [1,2,3]].values  
+y = df['Result']
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 4)  
+
+from sklearn.linear_model import LogisticRegression
+lo=LogisticRegression()
+lo.fit(X_train,y_train)
+y_pred=lo.predict(X_test)
+
+print('f1_score : ',f1_score(y_test,y_pred,average='micro'))
+
+from sklearn.metrics import confusion_matrix, classification_report 
+cm = confusion_matrix(y_test, y_pred) 
+print("Confusion matrix:\n",cm) 
+report = classification_report(y_test, y_pred) 
+print("Classification report:\n",report)
+
+WITH PCA---------------------------------------
+
+from sklearn.preprocessing import StandardScaler 
+from sklearn.decomposition import PCA 
+from sklearn.svm import SVC 
+from sklearn.model_selection import train_test_split, cross_val_score
+from sklearn.metrics import confusion_matrix, classification_report 
+import pandas as pd 
+import matplotlib.pyplot as plt 
+import seaborn as sns 
+import numpy as np 
+
+
+scaler = StandardScaler() 
+X_scaled_drop = pd.DataFrame(scaler.fit_transform(X))
+
+pca = PCA(n_components=0.95) 
+x_pca = pca.fit_transform(X_scaled_drop)
+x_pca=pd.DataFrame(x_pca) 
+print("Before PCA, X dataframe shape = ",X.shape,"\nAfter PCA, x_pca dataframe shape = ",x_pca.shape)
+
+X_train, X_test, y_train, y_test = train_test_split(x_pca, y, test_size = 0.2, random_state = 4)  
+
+lo=LogisticRegression()
+lo.fit(X_train,y_train)
+y_pred=lo.predict(X_test)
+
+print('f1_score : ',f1_score(y_test,y_pred,average='micro'))
+
+SVM-------------------------------------------------------------------------------------------------------------------------------------------------------
+
+from sklearn.preprocessing import StandardScaler 
+from sklearn.decomposition import PCA 
+from sklearn.svm import SVC 
+from sklearn.model_selection import train_test_split, cross_val_score
+from sklearn.metrics import confusion_matrix, classification_report 
+import pandas as pd 
+import matplotlib.pyplot as plt 
+import seaborn as sns 
+import numpy as np
+
+scaler=StandardScaler()
+X_scaled_drop = pd.DataFrame(scaler.fit_transform(X))
+
+pca = PCA(n_components=0.95) 
+x_pca = pca.fit_transform(X_scaled_drop)
+x_pca=pd.DataFrame(x_pca) 
+print("Before PCA, X dataframe shape = ",X.shape,"\nAfter PCA, x_pca dataframe shape = ",x_pca.shape)
+
+print(x_pca.shape)
+print(Y.shape)
+
+X_train, X_test, Y_train, Y_test = train_test_split(x_pca, Y, test_size=0.25, random_state=0)
+svc = SVC()
+svc.fit(X_train,Y_train)
+y_pred =svc.predict(X_test)
+
+print(confusion_matrix(Y_test,y_pred))
+
+sns.heatmap(confusion_matrix(Y_test, y_pred), annot=True, fmt='2.0f');
+
+
+KNN-----------------------------------------------------------------------------------------------------------------------------
+
+%matplotlib inline
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.datasets import load_iris
+iris= load_iris()
+
+type(iris)
+
+iris.data
+
+print(iris.feature_names)
+
+print(iris.target_names)
+
+plt.scatter(irist.data[:,0],iris.data[:,1],c=iris.target, cmap=plt.cm.Paired)
+plt.xlabel(iris.feature_names[0])
+plt.ylabel(iris.feature_names[1])
+plt.show()
+
+plt.scatter(iris.data[:,2],iris.data[:,3],c=iris.target, cmap=plt.cm.Paired)
+plt.xlabel(iris.feature_names[2])
+plt.ylabel(iris.feature_names[3])
+plt.show()
+
+p = iris.data
+q = iris.target
+data = np.c_[iris.data, iris.target]
+columns = np.append(iris.feature_names,["target"])
+df = pd.DataFrame(data,columns=columns)
+print(df)
+
+df[iris.feature_names].describe()
+
+sns.heatmap(df[iris.feature_names].corr(),annot=True)
+plt.plot()6
+
+sns.boxplot(x="target",y="petal length (cm)",data=df)
+
+sns.boxplot(x="target",y="petal width (cm)",data=df)
+
+sns.pairplot(df, hue="target", size=4)
+
+p_train,p_test,q_train,q_test = train_test_split(p,q,test_size=0.2,random_state=4)
+print(p_train.shape)
+print(p_test.shape)
+print(q_train.shape)
+print(q_test.shape)
+
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn import metrics
+
+k_range = range(1,26)
+scores_list = []
+for k in k_range:
+        knn = KNeighborsClassifier(n_neighbors=k)
+        knn.fit(p_train,q_train)
+        q_pred=knn.predict(p_test)
+        scores_list.append(metrics.accuracy_score(q_test,q_pred))
+        
+
+plt.plot(k_range,scores_list)
+plt.xlabel('k value for KNN')
+plt.ylabel('Accuracy on dataset')
+
+from sklearn.model_selection import cross_val_score
+scores={}
+cv_scores=[]
+for k in k_range:
+  knn=KNeighborsClassifier(n_neighbors=k)
+  scores[k]=cross_val_score(knn,p_train,q_train,cv=10,scoring='accuracy').mean()
+  cv_scores.append(scores[k])
+MSE= [1-x for x in cv_scores]
+
+plt.title('The optimal number of neighbors')
+plt.xlabel('Number of neighbors K')
+plt.ylabel('Misclassification error')
+plt.plot(k_range, MSE)
+plt.show()
+
+
+maximum = max(scores, key=scores.get)
+print("Maximum value:",maximum)
+
+knn = KNeighborsClassifier(n_neighbors=12)
+knn.fit(p_train,q_train)
+y_pred = knn.predict(p_test)
+metrics.confusion_matrix(q_test,y_pred)
+metrics.accuracy_score(q_test,y_pred)
+
