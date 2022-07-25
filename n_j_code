@@ -1,0 +1,99 @@
+DB CREATE--------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+var MongoClient = require('mongodb').MongoClient;
+var url = "mongodb://localhost:27017/mydb1";
+
+MongoClient.connect(url, function(err, db) {
+  if (err) throw err;
+  console.log("Database created!");
+  db.close();
+});
+
+COLLECTION CREATE-------------------------------------------------------------------------------------------------------------------------------------------------------
+
+var MongoClient = require('mongodb').MongoClient;
+var url = "mongodb://localhost:27017/";
+
+MongoClient.connect(url, function(err, db) {
+  if (err) throw err;
+  var dbo = db.db("mydb1");
+  dbo.createCollection("customers", function(err, res) {
+    if (err) throw err;
+    console.log("Collection created!");
+    db.close();
+  });
+});
+
+
+INSERT CODE -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+var MongoClient=require('mongodb').MongoClient;
+var url="mongodb://localhost:27017/";
+
+MongoClient.connect(url,function(err,db){
+   if(err) throw err;
+   var dbo=db.db("mydb6");
+   var myobj=[{name:"anu",age:"26"},{name:"shakthi",age:"21"},
+    {name:"sakthi",age:"20"},{name:"siri",age:"21"}];
+   dbo.collection("customer").insertMany(myobj,function(err,res){
+    if(err) throw err;
+    console.log("data inserted");
+    db.close();
+   });
+   });
+   
+
+UPDATE CODE------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+var MongoClient = require('mongodb').MongoClient;
+var url = "mongodb://127.0.0.1:27017/";
+
+MongoClient.connect(url, function(err, db) {
+  if (err) throw err;
+  var dbo = db.db("mydb6");
+  var myquery = {age:"21"};
+  var newvalues = { $set: {name:"siri",age:"41"} };
+  dbo.collection("customer").updateOne(myquery, newvalues, function(err, res) {
+    if (err) throw err;
+    console.log("1 document updated");
+    db.close();
+  });
+});
+
+
+
+DELETE CODE --------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+var MongoClient = require('mongodb').MongoClient;
+var url = "mongodb://localhost:27017/";
+
+MongoClient.connect(url, function(err, db) {
+  if (err) throw err;
+  var dbo = db.db("mydb6");
+  var myquery = { age:"21" };
+  dbo.collection("customer").deleteOne(myquery, function(err, obj) {
+    if (err) throw err;
+    console.log("1 document deleted");
+    db.close();
+  });
+});
+
+
+FIND CODE----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+var MongoClient = require('mongodb').MongoClient;
+var url = "mongodb://localhost:27017/";
+
+MongoClient.connect(url, function(err, db) {
+  if (err) throw err;
+  var dbo = db.db("mydb6");
+  dbo.collection("customer").findOne({name:"anu"}, function(err, result) {
+    if (err) throw err;
+    console.log(result.age);
+    db.close();
+  });
+});
+
+
+
