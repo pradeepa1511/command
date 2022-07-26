@@ -97,3 +97,146 @@ MongoClient.connect(url, function(err, db) {
 
 
 
+
+
+
+
+
+
+<html>
+	<head>
+		<script>
+			function FIELDVALIDATION() {
+				var name =
+					document.forms.RegForm.Name.value;
+				var email =
+					document.forms.RegForm.EMail.value;
+				var phone =
+					document.forms.RegForm.Telephone.value;
+				var password =
+					document.forms.RegForm.Password.value;
+				var address =
+					document.forms.RegForm.Address.value;
+				// var regEmail=/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/g; //Javascript reGex for Email Validation.
+				var regPhone=/^\d{10}$/;									 // Javascript reGex for Phone Number validation.
+				var regName = /\d+$/g;								 // Javascript reGex for Name validation
+
+				var atposition=email.indexOf('@');
+				var dotposition=email.indexOf('.');
+
+				if (name == "" || regName.test(name)) {
+					window.alert("Please enter your name properly.");
+					return false;
+				}
+
+				if (address == "") {
+					window.alert("Please enter your address.");
+					return false;
+				}
+				
+				if (email=""||atposition<1 || dotposition<atposition+2 || dotposition+2>=email.length) {
+					window.alert("Please enter a valid e-mail address.");
+					return false;
+				}
+
+				         
+				if (password == "") {
+					window.alert("Please enter your password");
+					
+					return false;
+				}
+
+				if(password.length <6){
+					window.alert("Password should be atleast 6 character long");
+					return false;
+
+				}
+
+				if(!password.match(/[0-9]/g))
+				{
+					window.alert("P should contain numbers");
+					return false;
+				}
+
+				if(!password.match(/[A-Z]/g))
+				{
+					window.alert("P should contain capital letters also");
+					return false;
+				}
+
+				if (phone == "" || !regPhone.test(phone)) {
+					window.alert("Please enter valid phone number.");
+					return false;
+				}
+				return true;
+			}
+		</script>
+
+		<style>
+			div {
+				box-sizing: border-box;
+				width: 100%;
+				border: 100px solid black;
+				float: left;
+				align-content: center;
+				align-items: center;
+			}
+
+			form {
+				margin: 0 auto;
+				width: 600px;
+			}
+			
+		</style>
+	</head>
+
+	<body background="https://i.pinimg.com/originals/cb/c7/b1/cbc7b1c08738ceddce3780dc5dd7ba6c.jpg">
+		<h1 style="text-align: center;">REGISTRATION FORM</h1>
+		<form name="RegForm" onsubmit="return FIELDVALIDATION()" >
+			
+<p>Name: <input type="text"
+							size="65" name="Name" /></p>
+
+			<br />
+			
+<p>Address: <input type="text"
+							size="65" name="Address" />
+		</p>
+
+			<br />
+			
+<p>E-mail Address: <input type="text"
+							size="65" name="EMail" /></p>
+
+			<br />
+			
+<p>Password: <input type="text"
+						size="65" name="Password" /></p>
+
+			<br />
+			
+<p>Telephone: <input type="text"
+						size="65" name="Telephone" /></p>
+
+			<br />
+
+			
+
+
+			<br />
+			<br />
+			
+<p>Query: <textarea cols="55"
+							name="Comment"> </textarea></p>
+
+			
+<p>
+				<input type="submit"
+					value="send" name="Submit" />
+				<input type="reset"
+					value="Reset" name="Reset" />
+			</p>
+
+		</form>
+	</body>
+</html>
